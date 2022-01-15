@@ -1,0 +1,102 @@
+GRD-START {
+	/** RECTANGULAR:  100m / 50m , drone covers 1m^2 **/
+
+	outln( "To connect to drone, enter key word '1'. To exit from the program, enter key word '0'." );
+	
+	int start = input();
+	
+	/** if user types 1, and drone battery is greater than 20%, spraying will be started. **/
+	if ( start == 1 && getBatteryPerc() >= 20) {
+		
+		connect();
+		changeSpray(true);
+		setHeight();
+		
+		/** in climbUpStopDown function, if first argument is true, drone stops vertically; if first argument is false, second argument = true -> go up; second argument = false -> go down **/
+		climbUpStopDown(false, true);
+		
+		/** waitNextInst takes an integer and waits that seconds. WaitNextInst and climbUpStopDown are used together in order to go up 0.1 * 50 = 5 meters. **/
+		waitNextInst( 50 );
+		
+		/** stop after 5 meters **/
+		climbUpStopDown( true, true );
+		
+		for ( int i = 0; i < 24; i++ ) {
+			moveForwardStopBackward(false, true);
+			
+			waitNextInst( 100 );	/** go forward 100 meters **/
+			
+			moveForwardStopBackward(true, false);
+			
+			setHeading( getHeading() + 90 );	/** turn 90 degrees **/
+			
+			moveForwardStopBackward(false, true);
+			
+			waitNextInst( 1 );	/** go forward 1 meter **/
+			
+			moveForwardStopBackward(true, false);
+			
+			setHeading( getHeading() + 90 );	/** turn 90 degrees **/
+			
+			moveForwardStopBackward(false, true);
+			
+			waitNextInst( 100 );
+			
+			moveForwardStopBackward(true, false);
+			
+			setHeading( getHeading() - 90 );
+			
+			moveForwardStopBackward(false, true);
+			
+			waitNextInst( 1 );
+			
+			moveForwardStopBackward(true, false);
+			
+			setHeading( getHeading() - 90 );
+		}
+		
+		/** last movement and turning back to the starting point **/
+		moveForwardStopBackward(false, true);
+		
+		waitNextInst( 100 );
+		
+		moveForwardStopBackward(true, false);
+		
+		setHeading( getHeading() + 90 );
+		
+		moveForwardStopBackward(false, true);
+		
+		changeSpray(false);
+		
+		waitNextInst( 1 );
+		
+		moveForwardStopBackward(true, false);
+		
+		setHeading( getHeading() + 90 );
+		
+		moveForwardStopBackward(false, true);
+		
+		waitNextInst( 100 );
+		
+		moveForwardStopBackward(true, false);
+		
+		setHeading( getHeading() + 90 );
+		
+		moveForwardStopBackward( false, true );
+		
+		waitNextInst( 50 );
+		
+		moveForwardStopBackward( true, false);
+		
+		setAltitude(0);
+		
+		disconnect();
+	}
+	else_if( start == 1 && getBatteryPerc() < 20 ){	
+		/** if battery percentage is under 20%, drone does not fly and program ends.**/
+		outln("Battery percentage is under 20 percent. Drone cannot fly. Exitting...");
+	}
+	else {
+		outln("Good bye.");
+	}
+}

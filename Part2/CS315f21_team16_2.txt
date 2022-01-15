@@ -1,0 +1,104 @@
+GRD-START {
+	/** Parallelogram: 100m / 80m, angles: 60°, 120°, 60°, 120°, drone covers 1m^2**/
+	
+	if ( getBatteryPerc() < 20 ) {
+		outln("Battery percentage is under 20 percent. Drone cannot fly. Exitting...");
+	}
+	else {
+		outln( "To connect to drone, enter key word '1'. To exit from the program, enter key word '0'." );
+		
+		int start = input();  /** Take the input from the user **/
+		
+		if ( start == 1 ) { /** If the input is 1, start spraying the area **/
+		
+			connect(); /** Connect the drone to computer **/
+			
+			/** Declare the length of the edges **/
+			int longEdge = 100; 
+			int shortEdge = 80;
+			
+			setHeight(); /** Set the ground as zero level **/
+			
+			climbUpStopDown(false, true); /** Start climbing upwards **/
+			
+			waitNextInst( 50 ); /** Wait the next instruction for 50 seconds. Because drone needs to go up to 5 meters **/
+			
+			climbUpStopDown(true, false); /** Stop climbing **/
+			
+			changeSpray(true); /** Open sprays **/
+			
+			moveForwardStopBackward(false, true); /** Move forward **/
+			
+			waitNextInst( 80 ); /** Wait the next instruction for 80 seconds. Because the drone needs to go 80 meters forward **/
+			
+			moveForwardStopBackward(true, false); /** Stop moving **/
+			
+			setHeading( getHeading() + 60 ); /** Rotate the drone 60 degrees **/
+			
+			while ( shortEdge > 0 ) { 
+				/** The drone moves forward, then turns right and moves forward. Therefore, it will first goes on the longer edge and then move to shorter edge. The total move will look like a spiral **/
+				/** Go on the longer edge **/
+				moveForwardStopBackward(false, true);
+				waitNextInst( longEdge );
+				
+				/** Decrease the longer edge, because the drone will move on the inner side next time **/
+				longEdge = longEdge - 1;
+				
+				/** Stop **/
+				moveForwardStopBackward(true, false);
+				
+				/** Turn right on the corner **/
+				setHeading( getHeading() + 120 );
+				
+				/** move on the shorter edge **/
+				moveForwardStopBackward(false, true);
+				waitNextInst( shortEdge );
+				
+				/** Decrease the shorter edge, because the drone will move on the inner side next time **/
+				shortEdge = shortEdge - 1;
+				
+				/** Stop **/
+				moveForwardStopBackward(true, false);
+				
+				/** Turn right **/
+				setHeading( getHeading() + 60 );
+			}
+			
+			/** When the shorter edge becomes 0, that means the drone covered all the area. Therefore, the drone needs to go back to starting point **/
+			/** Close the spray **/
+			changeSpray(false);
+			
+			/** Go backwards to reach the edge of the parallelogram **/
+			moveForwardStopBackward(false, false);
+			
+			waitNextInst( 40 );
+			
+			/** Stop **/
+			moveForwardStopBackward(true, false);
+			
+			/** Turn left **/
+			setHeading( getHeading() + 240 );
+			
+			/** Start moving **/
+			moveForwardStopBackward(false, true);
+			
+			waitNextInst( 40 );
+			
+			/** Stop at the starting point **/
+			moveForwardStopBackward(true, false);
+			
+			/** Go down to the ground **/
+			setAltitude( 0 );
+			
+			/** Disconnect the drone from computer **/
+			disconnect();
+			
+			outln("Operation is done!");
+			
+		}
+		
+		else {
+			outln("Good bye.");
+		}
+	}
+}

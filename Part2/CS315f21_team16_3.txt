@@ -1,0 +1,93 @@
+GRD-START{
+	
+	/** this code sprays a triangular area **/
+
+	int function askToUser(){
+		outln("Please enter 1 to spray to the triangular area (base = 40 m, height = 12 m), 0 to exit:");
+		int selection = input();
+		return selection;
+	}
+	
+	int select = askToUser();
+	if(select == 1 && getBatteryPerc() >= 20){
+		outln("Spraying starting...");
+		connect();
+		changeSpray(true);
+		
+		setHeight();
+		
+		climbUpStopDown(false, true);
+		
+		/** waitNextInst takes an integer and waits that seconds. WaitNextInst and climbUpStopDown are used together in order to go up 0.1 * 50 = 5 meters. **/
+		waitNextInst( 50 );
+		
+		/** stop after 5 meters **/
+		climbUpStopDown( true, true );
+		
+		void function sprayAll(){
+			for(int i = 50; i >= 0; i--){
+			
+			moveForwardStopBackward(false, true);
+			
+			waitNextInst( i );
+			
+			moveForwardStopBackward(true, false);
+			
+			setHeading( getHeading() - 120);
+			
+			moveForwardStopBackward(false, true);
+			
+			waitNextInst( 1 );
+			
+			moveForwardStopBackward(true, false);
+			
+			setHeading( getHeading() - 60);	
+			
+			moveForwardStopBackward(false, true);
+			
+			waitNextInst( i - 1 );
+			
+			moveForwardStopBackward(true, false);
+			
+			setHeading( getHeading() + 120);
+			
+			moveForwardStopBackward(false, true);
+			
+			waitNextInst( 1 );
+			
+			moveForwardStopBackward(true, false);
+			
+			setHeading( getHeading() + 60 );
+			
+			i = i - 1;
+			
+			}
+			changeSpray(false);
+		
+			setHeading( getHeading() + 120);	/**turning back to starting point **/
+			
+			moveForwardStopBackward(false, true);
+			
+			waitNextInst( 50 );
+			
+			moveForwardStopBackward(true, false);
+			
+			setAltitude(0);
+		
+		}
+		
+		sprayAll();		/** calling function **/
+		
+		disconnect();
+		
+		outln("Spraying was successfully completed.");		
+	}
+	
+	else_if(select == 1 && getBatteryPerc() < 20){
+		outln("Battery is low for spraying. Exitting...");
+	}
+	
+	else{
+		outln("Goodbye...");
+	}
+}
