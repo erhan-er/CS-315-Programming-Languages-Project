@@ -1,0 +1,31 @@
+GRD-START {
+	connect();
+	int function findNorthDistance() {
+		int currentHeading = getHeading();
+		if (currentHeading > 180) {
+		currentHeading = currentHeading - 180;
+		}		
+		return currentHeading;
+	}
+	int i = 0;
+	string str = "Hi there :) Drone heading is changing...";
+	outln(str);
+	int arr = [];
+	while( i < 10 ) {
+		turnLeftRight(true);
+		out("Current heading is ");
+		outln(getHeading());
+		arr[i] = getHeading();
+		outln("----------------------");
+		i++;
+	}   
+	str = "Hi again, drone heading is fixed at 10 degrees. Please enter a value to change the heading";
+	heading newHeading = input();
+	out("Heading is changing to");
+	outln(newHeading);
+	setHeading(newHeading);
+	outln("Heading is successfully changed");
+	out("North distance is ");
+	outln(findNorthDistance());
+	disconnect();
+}

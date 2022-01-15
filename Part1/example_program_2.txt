@@ -1,0 +1,102 @@
+GRD-START {
+	connect();
+	outln("Successfully connected!");
+	outln("Please select what do you want to do:");
+	outln("1- Turn heading left or right");
+	outln("2- Climb drone up/down - stop");
+	outln("3- Move heading direction forward/backward");
+	outln("4- Turn sprey on/off");
+	outln("0- Exit");
+	int selection = input();
+	while(selection != 0){
+		if(selection == 1){
+			outln("Do you want to turn left(1) or right(-1)?");
+			int leftRight = input();
+			if(leftRight == 1){
+				turnLeftRight(true);
+				outln("Heading was turned to left 1 degree.");
+			}
+			if(leftRight == -1){
+				turnLeftRight(false);
+				outln("Heading was turned to right 1 degree.");
+			}
+			else{
+				outln("Invalid input");
+			}
+		}
+		if(selection == 2){
+			outln("Do you want to climb drone up(1)/down(-1) - stop(0)");
+			int climbSelection = input();
+			if(climbSelection == 1){
+				/**if first argument of climbUpStopDown is false, and second argument is true, drone starts to climb up with speed of 0.1 m/s. **/
+				climbUpStopDown(false, true);
+				outln("Starting to climb up with speed of 0.1 m/s.");
+			}
+			if(climbSelection == -1){
+				/**if first argument of climbUpStopDown is false, and second argument is false, drone starts to climb down with speed of 0.1 m/s. **/
+				climbUpStopDown(false, false);
+				outln("Starting to climb down with speed of 0.1 m/s.");
+			}
+			if(climbSelection == 0){
+				/**if first argument of climbUpStopDown is true, drone stops vertically **/
+				climbUpStopDown(true, false);
+				outln("Stopping the drone vertically.");
+			}
+			else{
+				outln("Invalid input");
+			}
+		}
+		if(selection == 3){
+			outln("Do you want to move heading direction forward(1)/backward(-1) - stop (0)");
+			int headingFBSelection = input();
+			if(headingFBSelection == 1){
+				/**if first argument of moveForWardStopBackward is false, and second argument is true, drone starts to move forward with speed of 1 m/s. **/
+				moveForWardStopBackward(false, true);
+				outln("Starting to move forward with speed of 1 m/s.");
+			}
+			if(headingFBSelection == -1){
+				/**if first argument of moveForWardStopBackward is false, and second argument is false, drone starts to move backward with speed of 1 m/s. **/
+				moveForWardStopBackward(false, false);
+				outln("Starting to move backward with speed of 1 m/s.");
+			}
+			if(headingFBSelection == 0){
+				/**if first argument of moveForWardStopBackward is true, drone stops **/
+				moveForWardStopBackward(true, false);
+				outln("Drone is stopeed horizontally.");
+			}
+			else{
+				outln("Invalid input");
+			}
+		}
+		if(selection == 4){
+			outln("Do you want to turn on(1) or turn off(-1) the spray?");
+			int spraySelection = input();
+			if(spraySelection == 1){
+				/**if changeSpray function takes true, drone starts to spray**/
+				changeSpray(true);
+				outln("Spray is turning on...");
+			}
+			if(spraySelection == -1){
+				/**if changeSpray function takes false, drone stops spray**/
+				changeSpray(false);
+				outln("Spray is turning off...");
+			}
+			else{
+				outln("Invalid input");
+			}	
+		}
+		else{
+			outln("Invalid input");
+		}
+		outln("Please select what do you want to do:");
+		outln("1- Turn heading left or right");
+		outln("2- Climb drone up/down - stop");
+		outln("3- Move heading direction forward/backward");
+		outln("4- Turn sprey on/off");
+		outln("0- Disconnect and exit");
+		selection = input();
+	}
+	/**If user selects 0, program will disconnect and exit**/
+	disconnect();
+	outln("Successfully disconnected. Exiting...");
+}
